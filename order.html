@@ -9,7 +9,7 @@
   <style>
     :root {
       --dark: #0a0a0a;
-      --card-bg: #161616;
+      --card-bg: rgba(22, 22, 22, 0.85); /* Glass effect */
       --accent: #BB86FC;
       --text: #e0e0e0;
       --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -19,7 +19,13 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--dark);
+      /* Background Implementation */
+      background: 
+        linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.85)), 
+        url('1000015692.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
@@ -116,8 +122,10 @@
     .form-box {
       background: var(--card-bg);
       padding: 40px;
-      border: 1px solid #222;
+      border: 1px solid rgba(187, 134, 252, 0.1);
       border-radius: 4px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
 
     .form-box h2 {
@@ -143,17 +151,24 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       margin-bottom: 8px;
-      color: #666;
+      color: #999;
     }
 
     input, select, textarea {
       width: 100%;
-      background: #0a0a0a;
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid #333;
       padding: 15px;
       color: #fff;
       font-family: 'Inter', sans-serif;
       font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(0, 0, 0, 0.6);
     }
 
     .item-selection-grid {
@@ -164,17 +179,19 @@
     }
 
     .add-btn {
-      background: #222;
+      background: rgba(187, 134, 252, 0.1);
       color: var(--accent);
       border: 1px solid var(--accent);
       padding: 0 20px;
       cursor: pointer;
       font-family: 'Syncopate';
       font-size: 0.6rem;
+      transition: var(--transition);
     }
+    .add-btn:hover { background: var(--accent); color: #000; }
 
     #orderList {
-      background: #0d0d0d;
+      background: rgba(0,0,0,0.3);
       border: 1px solid #222;
       padding: 15px;
       margin-bottom: 10px;
@@ -186,18 +203,18 @@
       justify-content: space-between;
       font-size: 0.8rem;
       padding: 8px 0;
-      border-bottom: 1px solid #1a1a1a;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
     .total-box {
       text-align: right;
-      padding: 10px;
-      background: rgba(187, 134, 252, 0.05);
-      border: 1px solid #222;
+      padding: 15px;
+      background: rgba(187, 134, 252, 0.08);
+      border: 1px solid rgba(187, 134, 252, 0.2);
       margin-bottom: 20px;
     }
 
-    .total-box span { font-family: 'Syncopate'; color: var(--accent); font-size: 1rem; }
+    .total-box span { font-family: 'Syncopate'; color: var(--accent); font-size: 1.1rem; text-shadow: 0 0 10px rgba(187, 134, 252, 0.3); }
 
     .order-btn {
       width: 100%;
@@ -211,12 +228,15 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       cursor: pointer;
+      transition: var(--transition);
     }
+    .order-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(187, 134, 252, 0.3); }
 
-    /* --- UPDATED MATCHING FOOTER --- */
+    /* --- FOOTER --- */
     footer {
-      padding: 80px 8% 40px; background: #050505;
+      padding: 80px 8% 40px; background: rgba(5, 5, 5, 0.9);
       border-top: 1px solid #1a1a1a; color: #888;
+      backdrop-filter: blur(10px);
     }
     .footer-content {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

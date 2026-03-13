@@ -9,7 +9,7 @@
   <style>
     :root {
       --dark: #0a0a0a;
-      --card-bg: #161616;
+      --card-bg: rgba(22, 22, 22, 0.8); /* Adjusted for transparency */
       --accent: #BB86FC;
       --text: #e0e0e0;
       --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -19,7 +19,13 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--dark);
+      /* Background Implementation */
+      background: 
+        linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.85)), 
+        url('1000015692.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
@@ -128,8 +134,8 @@
     }
 
     .filter-btn {
-      background: transparent;
-      border: 1px solid #222;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid #333;
       color: #666;
       padding: 8px 16px;
       font-family: 'Syncopate', sans-serif;
@@ -137,11 +143,13 @@
       cursor: pointer;
       text-transform: uppercase;
       transition: var(--transition);
+      backdrop-filter: blur(5px);
     }
 
     .filter-btn:hover, .filter-btn.active {
       border-color: var(--accent);
       color: var(--accent);
+      background: rgba(187, 134, 252, 0.1);
     }
 
     .juice-grid {
@@ -158,10 +166,16 @@
       transition: var(--transition);
       text-align: center;
       position: relative;
+      backdrop-filter: blur(10px);
     }
     
     .juice-card.hidden { display: none; }
-    .juice-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(187, 134, 252, 0.1); }
+    .juice-card:hover { 
+      border-color: var(--accent); 
+      transform: translateY(-5px); 
+      background: rgba(28, 28, 28, 0.9);
+      box-shadow: 0 10px 30px rgba(187, 134, 252, 0.15); 
+    }
     .juice-card img { width: 100%; height: 200px; object-fit: contain; margin-bottom: 15px; }
 
     .juice-tag {
@@ -173,16 +187,18 @@
 
     .puff-badge {
       position: absolute; top: 10px; right: 10px;
-      background: #222; color: #fff; font-size: 0.5rem;
+      background: rgba(34, 34, 34, 0.8); color: #fff; font-size: 0.5rem;
       padding: 3px 8px; border-radius: 2px; border: 1px solid var(--accent);
+      backdrop-filter: blur(4px);
     }
 
     .flava-exclusive { border: 1px solid rgba(187, 134, 252, 0.3); }
 
     /* --- GLOBAL FOOTER --- */
     footer {
-      padding: 80px 8% 40px; background: #050505;
+      padding: 80px 8% 40px; background: rgba(5, 5, 5, 0.9);
       border-top: 1px solid #1a1a1a; color: #888;
+      backdrop-filter: blur(10px);
     }
     .footer-content {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
