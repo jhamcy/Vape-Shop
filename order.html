@@ -213,6 +213,7 @@
       cursor: pointer;
     }
 
+    /* --- UPDATED MATCHING FOOTER --- */
     footer {
       padding: 80px 8% 40px; background: #050505;
       border-top: 1px solid #1a1a1a; color: #888;
@@ -226,6 +227,7 @@
       font-size: 0.7rem; margin-bottom: 20px; letter-spacing: 2px;
     }
     .footer-links ul { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
     .footer-links a {
       color: #666; text-decoration: none;
       font-size: 0.85rem; transition: var(--transition);
@@ -238,8 +240,8 @@
       background: rgba(187, 134, 252, 0.05); border: 1px solid rgba(187, 134, 252, 0.2);
       padding: 12px 25px; border-radius: 50px;
     }
-    .jmcy-badge b { color: var(--accent); }
-    .warning-text { font-size: 0.65rem; color: #444; margin-top: 20px; text-transform: uppercase; }
+    .jmcy-badge b { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+    .warning-text { font-size: 0.65rem; color: #444; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.8; }
 
     @media (max-width: 900px) {
       .nav-links { display: none; }
@@ -360,15 +362,26 @@
 <footer>
   <div class="footer-content">
     <div class="footer-brand">
-      <a href="#" class="logo">CLOUD&COIL</a>
-      <p style="font-size: 0.85rem; margin-top: 15px;">Makati's #1 source for high-capacity disposable vapes.</p>
+      <a href="index.html" class="logo">CLOUD&COIL</a>
+      <p style="font-size: 0.85rem; margin-top: 15px; color: #666; max-width: 300px;">
+        Makati's #1 source for high-capacity disposable vapes. Official retailer of <b>Flava Oxbar</b> and premium hardware.
+      </p>
     </div>
     <div class="footer-links">
-      <h4>Links</h4>
+      <h4>Navigation</h4>
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="juice.html">Disposables</a></li>
         <li><a href="catalog.html">Hardware</a></li>
+        <li><a href="order.html">Order Now</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="https://wa.me/639000000000">WhatsApp Support</a></li>
       </ul>
     </div>
   </div>
@@ -377,7 +390,12 @@
     <a href="#" class="jmcy-badge">
       <span style="color: #fff; font-size: 0.75rem;">Designed & Built by <b>JMCY WEB SOLUTIONS</b></span>
     </a>
-    <p class="warning-text">© 2026 Cloud & Coil • Nicotine is addictive.</p>
+    <p class="warning-text">
+      © 2026 Cloud & Coil • All Rights Reserved.<br>
+      <span style="color: var(--accent); font-weight: bold; margin-top: 10px; display: block;">
+        GOVERNMENT WARNING: This product contains nicotine which is a highly addictive substance. 21+ ONLY.
+      </span>
+    </p>
   </div>
 </footer>
 
@@ -445,7 +463,7 @@
     list.innerHTML = cart.map((i, idx) => `
       <div class="list-item">
         <span>${i.qty}x ${i.name}</span>
-        <span>₱${i.price.toLocaleString()} <b style="color:red;margin-left:8px;cursor:pointer" onclick="removeItem(${idx})">✕</b></span>
+        <span>₱${i.price.toLocaleString()} <b style="color:#ff4444;margin-left:8px;cursor:pointer" onclick="removeItem(${idx})">✕</b></span>
       </div>
     `).join('');
   }

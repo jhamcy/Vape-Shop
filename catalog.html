@@ -25,7 +25,7 @@
       overflow-x: hidden;
     }
 
-    /* --- COMPACT NAVIGATION (MATCHES INDEX/JUICE) --- */
+    /* --- NAVIGATION --- */
     header {
       background: rgba(10, 10, 10, 0.95);
       backdrop-filter: blur(15px);
@@ -61,21 +61,16 @@
     }
     .nav-links a:hover, .nav-links a.active { color: var(--accent); }
 
-    /* --- MOBILE MENU & BACKDROP --- */
+    /* --- MOBILE MENU --- */
     .menu-toggle {
       display: none;
       flex-direction: column;
       gap: 5px;
       cursor: pointer;
       z-index: 4000;
+      padding: 5px;
     }
-
-    .menu-toggle span {
-      width: 22px; height: 1.5px;
-      background-color: var(--accent);
-      transition: var(--transition);
-    }
-
+    .menu-toggle span { width: 22px; height: 1.5px; background-color: var(--accent); transition: var(--transition); }
     .menu-toggle.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
     .menu-toggle.active span:nth-child(2) { opacity: 0; }
     .menu-toggle.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
@@ -93,8 +88,8 @@
 
     .mobile-overlay {
       position: fixed;
-      top: 0; right: -50%;
-      width: 50%; height: 100vh;
+      top: 0; right: -70%;
+      width: 70%; height: 100vh;
       background: #111;
       display: flex; flex-direction: column;
       padding-top: 80px;
@@ -103,7 +98,6 @@
       border-left: 1px solid rgba(187, 134, 252, 0.1);
     }
     .mobile-overlay.active { right: 0; }
-
     .mobile-overlay a {
       font-family: 'Syncopate', sans-serif;
       color: white; text-decoration: none;
@@ -166,7 +160,7 @@
       margin-bottom: 8px; display: block;
     }
 
-    /* --- FOOTER (MATCHES INDEX) --- */
+    /* --- GLOBAL FOOTER --- */
     footer {
       padding: 80px 8% 40px; background: #050505;
       border-top: 1px solid #1a1a1a; color: #888;
@@ -193,8 +187,8 @@
       background: rgba(187, 134, 252, 0.05); border: 1px solid rgba(187, 134, 252, 0.2);
       padding: 12px 25px; border-radius: 50px;
     }
-    .jmcy-badge b { color: var(--accent); }
-    .warning-text { font-size: 0.65rem; color: #444; margin-top: 20px; text-transform: uppercase; }
+    .jmcy-badge b { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+    .warning-text { font-size: 0.65rem; color: #444; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.8; }
 
     @media (max-width: 900px) {
       .nav-links { display: none; }
@@ -227,6 +221,7 @@
 </div>
 
 <div class="page-title">
+  <p style="color: var(--accent); letter-spacing: 5px; text-transform: uppercase; font-size: 0.6rem; margin-bottom: 10px;">Premium Pods & Accessories</p>
   <h2 style="font-family: 'Syncopate'; font-size: 1.5rem;">GEAR & ACCESSORIES</h2>
   <div class="filter-group">
     <button class="filter-btn active" onclick="filterHW('all')">All Gear</button>
@@ -238,7 +233,7 @@
 
 <section class="catalog-grid">
   <div class="hw-card pod">
-    <span class="hw-tag">Starter Kit</span>
+    <span class="hw-tag">Top Seller</span>
     <img src="pod_xlim.png" alt="Xlim">
     <h3>OXVA Xlim Go</h3>
     <p style="color: var(--accent); font-weight: 700;">₱950</p>
@@ -276,8 +271,10 @@
 <footer>
   <div class="footer-content">
     <div class="footer-brand">
-      <a href="#" class="logo">CLOUD&COIL</a>
-      <p style="font-size: 0.85rem; margin-top: 15px;">Makati's #1 source for high-capacity disposable vapes. Fast delivery, authentic products.</p>
+      <a href="index.html" class="logo">CLOUD&COIL</a>
+      <p style="font-size: 0.85rem; margin-top: 15px; color: #666; max-width: 300px;">
+        Makati's #1 source for high-capacity disposable vapes. Official retailer of <b>Flava Oxbar</b> and premium hardware.
+      </p>
     </div>
     <div class="footer-links">
       <h4>Navigation</h4>
@@ -285,7 +282,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="juice.html">Disposables</a></li>
         <li><a href="catalog.html">Hardware</a></li>
-        <li><a href="order.html">Order Form</a></li>
+        <li><a href="order.html">Order Now</a></li>
       </ul>
     </div>
     <div class="footer-links">
@@ -293,7 +290,7 @@
       <ul>
         <li><a href="#">Facebook</a></li>
         <li><a href="#">Instagram</a></li>
-        <li><a href="#">TikTok</a></li>
+        <li><a href="https://wa.me/639000000000">WhatsApp Support</a></li>
       </ul>
     </div>
   </div>
@@ -302,11 +299,17 @@
     <a href="#" class="jmcy-badge">
       <span style="color: #fff; font-size: 0.75rem;">Designed & Built by <b>JMCY WEB SOLUTIONS</b></span>
     </a>
-    <p class="warning-text">© 2026 Cloud & Coil • Government Warning: This product contains nicotine which is a highly addictive substance.</p>
+    <p class="warning-text">
+      © 2026 Cloud & Coil • All Rights Reserved.<br>
+      <span style="color: var(--accent); font-weight: bold; margin-top: 10px; display: block;">
+        GOVERNMENT WARNING: This product contains nicotine which is a highly addictive substance. 21+ ONLY.
+      </span>
+    </p>
   </div>
 </footer>
 
 <script>
+  // --- MENU LOGIC ---
   const menuToggle = document.getElementById('menuToggle');
   const mobileOverlay = document.getElementById('mobileOverlay');
   const menuBackdrop = document.getElementById('menuBackdrop');
@@ -336,12 +339,10 @@
   });
 
   window.addEventListener('scroll', () => {
-    if (mobileOverlay.classList.contains('active')) {
-      closeMenu();
-    }
+    if (mobileOverlay.classList.contains('active')) closeMenu();
   }, { passive: true });
 
-  // Filter Logic
+  // --- FILTER LOGIC ---
   function filterHW(category) {
     const cards = document.querySelectorAll('.hw-card');
     const buttons = document.querySelectorAll('.filter-btn');
