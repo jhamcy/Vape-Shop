@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hardware & Gear | Cloud & Coil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --dark: #0a0a0a;
+      --card-bg: #161616;
+      --accent: #BB86FC;
+      --text: #e0e0e0;
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--dark);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* --- COMPACT NAVIGATION (MATCHES INDEX/JUICE) --- */
+    header {
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(15px);
+      padding: 0 8%;
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 3000;
+      border-bottom: 1px solid rgba(187, 134, 252, 0.05);
+    }
+
+    .logo {
+      font-family: 'Syncopate', sans-serif;
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+
+    .nav-links { display: flex; gap: 30px; align-items: center; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+    /* --- MOBILE MENU & BACKDROP --- */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 4000;
+    }
+
+    .menu-toggle span {
+      width: 22px; height: 1.5px;
+      background-color: var(--accent);
+      transition: var(--transition);
+    }
+
+    .menu-toggle.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .menu-backdrop {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100vh;
+      background: rgba(0,0,0,0.8);
+      opacity: 0; visibility: hidden;
+      transition: var(--transition);
+      z-index: 3400;
+    }
+    .menu-backdrop.active { opacity: 1; visibility: visible; }
+
+    .mobile-overlay {
+      position: fixed;
+      top: 0; right: -50%;
+      width: 50%; height: 100vh;
+      background: #111;
+      display: flex; flex-direction: column;
+      padding-top: 80px;
+      transition: var(--transition);
+      z-index: 3500;
+      border-left: 1px solid rgba(187, 134, 252, 0.1);
+    }
+    .mobile-overlay.active { right: 0; }
+
+    .mobile-overlay a {
+      font-family: 'Syncopate', sans-serif;
+      color: white; text-decoration: none;
+      font-size: 0.75rem; text-transform: uppercase;
+      padding: 20px 25px; border-bottom: 1px solid #1a1a1a;
+      display: block;
+    }
+
+    /* --- CATALOG CONTENT --- */
+    .page-title {
+      padding: 120px 8% 20px;
+      text-align: center;
+      background: radial-gradient(circle at top, rgba(187, 134, 252, 0.05) 0%, transparent 50%);
+    }
+
+    .filter-group {
+      display: flex; justify-content: center;
+      gap: 10px; flex-wrap: wrap; margin: 30px 0;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid #222;
+      color: #666;
+      padding: 8px 16px;
+      font-family: 'Syncopate', sans-serif;
+      font-size: 0.5rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: var(--transition);
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .catalog-grid {
+      padding: 0 8% 100px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .hw-card {
+      background: var(--card-bg);
+      padding: 25px;
+      border: 1px solid #222;
+      transition: var(--transition);
+      text-align: center;
+    }
+    
+    .hw-card.hidden { display: none; }
+    .hw-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+    .hw-card img { width: 100%; height: 200px; object-fit: contain; margin-bottom: 15px; }
+
+    .hw-tag {
+      color: var(--accent); font-size: 0.55rem;
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 8px; display: block;
+    }
+
+    /* --- FOOTER (MATCHES INDEX) --- */
+    footer {
+      padding: 80px 8% 40px; background: #050505;
+      border-top: 1px solid #1a1a1a; color: #888;
+    }
+    .footer-content {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px; text-align: left; margin-bottom: 60px;
+    }
+    .footer-links h4 {
+      color: var(--accent); font-family: 'Syncopate';
+      font-size: 0.7rem; margin-bottom: 20px; letter-spacing: 2px;
+    }
+    .footer-links ul { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a {
+      color: #666; text-decoration: none;
+      font-size: 0.85rem; transition: var(--transition);
+    }
+    .footer-links a:hover { color: var(--accent); padding-left: 5px; }
+
+    .portfolio-tag { border-top: 1px solid #111; padding-top: 40px; text-align: center; }
+    .jmcy-badge {
+      display: inline-block; text-decoration: none;
+      background: rgba(187, 134, 252, 0.05); border: 1px solid rgba(187, 134, 252, 0.2);
+      padding: 12px 25px; border-radius: 50px;
+    }
+    .jmcy-badge b { color: var(--accent); }
+    .warning-text { font-size: 0.65rem; color: #444; margin-top: 20px; text-transform: uppercase; }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">CLOUD&COIL</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="juice.html">Disposables</a>
+    <a href="catalog.html" class="active">Hardware</a>
+    <a href="order.html">Order Now</a>
+  </div>
+  <div class="menu-toggle" id="menuToggle">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+
+<div class="menu-backdrop" id="menuBackdrop"></div>
+
+<div class="mobile-overlay" id="mobileOverlay">
+  <a href="index.html">Home</a>
+  <a href="juice.html">Disposables</a>
+  <a href="catalog.html">Hardware</a>
+  <a href="order.html">Order Now</a>
+</div>
+
+<div class="page-title">
+  <h2 style="font-family: 'Syncopate'; font-size: 1.5rem;">GEAR & ACCESSORIES</h2>
+  <div class="filter-group">
+    <button class="filter-btn active" onclick="filterHW('all')">All Gear</button>
+    <button class="filter-btn" onclick="filterHW('pod')">Starter Pods</button>
+    <button class="filter-btn" onclick="filterHW('acc')">Accessories</button>
+    <button class="filter-btn" onclick="filterHW('charge')">Charging</button>
+  </div>
+</div>
+
+<section class="catalog-grid">
+  <div class="hw-card pod">
+    <span class="hw-tag">Starter Kit</span>
+    <img src="pod_xlim.png" alt="Xlim">
+    <h3>OXVA Xlim Go</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱950</p>
+  </div>
+
+  <div class="hw-card pod">
+    <span class="hw-tag">New Release</span>
+    <img src="geekvape_wenax.png" alt="Wenax">
+    <h3>Geekvape Wenax Q</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱1,100</p>
+  </div>
+
+  <div class="hw-card acc">
+    <span class="hw-tag">Essential</span>
+    <img src="lanyard.png" alt="Lanyard">
+    <h3>Universal Vape Lanyard</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱150</p>
+  </div>
+
+  <div class="hw-card acc">
+    <span class="hw-tag">Protection</span>
+    <img src="pouch.png" alt="Pouch">
+    <h3>Cloud & Coil Carry Pouch</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱250</p>
+  </div>
+
+  <div class="hw-card charge">
+    <span class="hw-tag">Fast Charging</span>
+    <img src="cable.png" alt="Cable">
+    <h3>Braided Type-C Fast Cable</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱199</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">CLOUD&COIL</a>
+      <p style="font-size: 0.85rem; margin-top: 15px;">Makati's #1 source for high-capacity disposable vapes. Fast delivery, authentic products.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="juice.html">Disposables</a></li>
+        <li><a href="catalog.html">Hardware</a></li>
+        <li><a href="order.html">Order Form</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="portfolio-tag">
+    <a href="#" class="jmcy-badge">
+      <span style="color: #fff; font-size: 0.75rem;">Designed & Built by <b>JMCY WEB SOLUTIONS</b></span>
+    </a>
+    <p class="warning-text">© 2026 Cloud & Coil • Government Warning: This product contains nicotine which is a highly addictive substance.</p>
+  </div>
+</footer>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileOverlay = document.getElementById('mobileOverlay');
+  const menuBackdrop = document.getElementById('menuBackdrop');
+
+  function closeMenu() {
+    menuToggle.classList.remove('active');
+    mobileOverlay.classList.remove('active');
+    menuBackdrop.classList.remove('active');
+  }
+
+  function openMenu() {
+    menuToggle.classList.add('active');
+    mobileOverlay.classList.add('active');
+    menuBackdrop.classList.add('active');
+  }
+
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (mobileOverlay.classList.contains('active')) closeMenu();
+    else openMenu();
+  });
+
+  menuBackdrop.addEventListener('click', closeMenu);
+
+  mobileOverlay.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  window.addEventListener('scroll', () => {
+    if (mobileOverlay.classList.contains('active')) {
+      closeMenu();
+    }
+  }, { passive: true });
+
+  // Filter Logic
+  function filterHW(category) {
+    const cards = document.querySelectorAll('.hw-card');
+    const buttons = document.querySelectorAll('.filter-btn');
+
+    buttons.forEach(btn => {
+      btn.classList.remove('active');
+      if(category === 'all' && btn.innerText.toLowerCase().includes('all')) btn.classList.add('active');
+      else if(btn.getAttribute('onclick').includes(category)) btn.classList.add('active');
+    });
+
+    cards.forEach(card => {
+      if (category === 'all' || card.classList.contains(category)) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+</script>
+</body>
+</html>

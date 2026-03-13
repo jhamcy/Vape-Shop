@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disposable Bar | Cloud & Coil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --dark: #0a0a0a;
+      --card-bg: #161616;
+      --accent: #BB86FC;
+      --text: #e0e0e0;
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--dark);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(15px);
+      padding: 0 8%;
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 3000;
+      border-bottom: 1px solid rgba(187, 134, 252, 0.05);
+    }
+
+    .logo {
+      font-family: 'Syncopate', sans-serif;
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+
+    .nav-links { display: flex; gap: 30px; align-items: center; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: var(--transition);
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* --- MOBILE NAVIGATION --- */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 4000;
+      padding: 5px;
+    }
+    .menu-toggle span { width: 22px; height: 1.5px; background-color: var(--accent); transition: var(--transition); }
+    .menu-toggle.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .menu-backdrop {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100vh;
+      background: rgba(0,0,0,0.8);
+      opacity: 0; visibility: hidden;
+      transition: var(--transition);
+      z-index: 3400;
+    }
+    .menu-backdrop.active { opacity: 1; visibility: visible; }
+
+    .mobile-overlay {
+      position: fixed;
+      top: 0; right: -50%;
+      width: 50%; height: 100vh;
+      background: #111;
+      display: flex; flex-direction: column;
+      padding-top: 80px;
+      transition: var(--transition);
+      z-index: 3500;
+      border-left: 1px solid rgba(187, 134, 252, 0.1);
+    }
+    .mobile-overlay.active { right: 0; }
+    .mobile-overlay a {
+      font-family: 'Syncopate', sans-serif;
+      color: white; text-decoration: none;
+      font-size: 0.75rem; text-transform: uppercase;
+      padding: 20px 25px; border-bottom: 1px solid #1a1a1a;
+      display: block;
+    }
+
+    /* --- CONTENT --- */
+    .page-title {
+      padding: 120px 8% 20px;
+      text-align: center;
+      background: radial-gradient(circle at top, rgba(187, 134, 252, 0.05) 0%, transparent 50%);
+    }
+
+    .brand-highlight {
+      font-family: 'Syncopate';
+      font-size: 0.6rem;
+      color: var(--accent);
+      letter-spacing: 4px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .filter-group {
+      display: flex; justify-content: center;
+      gap: 10px; flex-wrap: wrap; margin: 30px 0;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid #222;
+      color: #666;
+      padding: 8px 16px;
+      font-family: 'Syncopate', sans-serif;
+      font-size: 0.5rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: var(--transition);
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .juice-grid {
+      padding: 0 8% 100px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .juice-card {
+      background: var(--card-bg);
+      padding: 25px;
+      border: 1px solid #222;
+      transition: var(--transition);
+      text-align: center;
+      position: relative;
+    }
+    
+    .juice-card.hidden { display: none; }
+    .juice-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(187, 134, 252, 0.1); }
+    .juice-card img { width: 100%; height: 200px; object-fit: contain; margin-bottom: 15px; }
+
+    .juice-tag {
+      color: var(--accent); font-size: 0.55rem;
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 8px; display: block;
+      font-weight: 700;
+    }
+
+    .puff-badge {
+      position: absolute; top: 10px; right: 10px;
+      background: #222; color: #fff; font-size: 0.5rem;
+      padding: 3px 8px; border-radius: 2px; border: 1px solid var(--accent);
+    }
+
+    .flava-exclusive { border: 1px solid rgba(187, 134, 252, 0.3); }
+
+    footer {
+      padding: 80px 8% 40px; background: #050505;
+      border-top: 1px solid #1a1a1a; color: #888;
+    }
+    .footer-content {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px; text-align: left; margin-bottom: 60px;
+    }
+    .footer-links h4 {
+      color: var(--accent); font-family: 'Syncopate';
+      font-size: 0.7rem; margin-bottom: 20px; letter-spacing: 2px;
+    }
+    .footer-links ul { list-style: none; }
+    .footer-links a {
+      color: #666; text-decoration: none;
+      font-size: 0.85rem; transition: var(--transition);
+    }
+    .footer-links a:hover { color: var(--accent); padding-left: 5px; }
+
+    .portfolio-tag { border-top: 1px solid #111; padding-top: 40px; text-align: center; }
+    .jmcy-badge {
+      display: inline-block; text-decoration: none;
+      background: rgba(187, 134, 252, 0.05); border: 1px solid rgba(187, 134, 252, 0.2);
+      padding: 12px 25px; border-radius: 50px;
+    }
+    .jmcy-badge b { color: var(--accent); }
+    .warning-text { font-size: 0.65rem; color: #444; margin-top: 20px; text-transform: uppercase; }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">CLOUD&COIL</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="juice.html" style="color: var(--accent)">Disposables</a>
+    <a href="catalog.html">Hardware</a>
+    <a href="order.html">Order Now</a>
+  </div>
+  <div class="menu-toggle" id="menuToggle">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+
+<div class="menu-backdrop" id="menuBackdrop"></div>
+
+<div class="mobile-overlay" id="mobileOverlay">
+  <a href="index.html">Home</a>
+  <a href="juice.html">Disposables</a>
+  <a href="catalog.html">Hardware</a>
+  <a href="order.html">Order Now</a>
+</div>
+
+<div class="page-title">
+  <span class="brand-highlight">FEATURING FLAVA OXBAR</span>
+  <h2 style="font-family: 'Syncopate'; font-size: 1.5rem;">THE DISPOSABLE BAR</h2>
+  <div class="filter-group">
+    <button class="filter-btn active" onclick="filterJuice('all')">All</button>
+    <button class="filter-btn" onclick="filterJuice('flava')">Flava Brand</button>
+    <button class="filter-btn" onclick="filterJuice('fruit')">Fruit</button>
+    <button class="filter-btn" onclick="filterJuice('menthol')">Menthol</button>
+    <button class="filter-btn" onclick="filterJuice('pastry')">Pastry</button>
+  </div>
+</div>
+
+<section class="juice-grid">
+  
+  <div class="juice-card flava disposable fruit menthol flava-exclusive">
+    <span class="puff-badge">10,000 Puffs</span>
+    <span class="juice-tag">Flava Oxbar</span>
+    <img src="flava1.png" alt="Flava Watermelon">
+    <h3>Watermelon Ice</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱750</p>
+  </div>
+
+  <div class="juice-card flava disposable fruit flava-exclusive">
+    <span class="puff-badge">10,000 Puffs</span>
+    <span class="juice-tag">Flava Oxbar</span>
+    <img src="flava2.png" alt="Flava Strawberry">
+    <h3>Strawberry Gelato</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱750</p>
+  </div>
+
+  <div class="juice-card flava disposable fruit menthol flava-exclusive">
+    <span class="puff-badge">10,000 Puffs</span>
+    <span class="juice-tag">Flava Oxbar</span>
+    <img src="flava3.png" alt="Flava Grape">
+    <h3>Grape Punch</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱750</p>
+  </div>
+
+  <div class="juice-card flava disposable menthol flava-exclusive">
+    <span class="puff-badge">10,000 Puffs</span>
+    <span class="juice-tag">Flava Oxbar</span>
+    <img src="flava4.png" alt="Flava Cool Mint">
+    <h3>Extreme Cool Mint</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱750</p>
+  </div>
+
+  <div class="juice-card disposable fruit menthol">
+    <span class="puff-badge">15,000 Puffs</span>
+    <span class="juice-tag">Geek Bar Pulse</span>
+    <img src="dispo1.png" alt="Geek Bar">
+    <h3>Lush Ice</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱850</p>
+  </div>
+
+  <div class="juice-card disposable fruit">
+    <span class="puff-badge">12,000 Puffs</span>
+    <span class="juice-tag">Shift Bar</span>
+    <img src="shift1.png" alt="Shift">
+    <h3>Yakult Berry</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱780</p>
+  </div>
+
+  <div class="juice-card pastry">
+    <span class="juice-tag">Freebase E-Liquid</span>
+    <img src="juice1.png" alt="Pastry">
+    <h3>Vanilla Almond Cupcake</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱550</p>
+  </div>
+
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">CLOUD&COIL</a>
+      <p style="font-size: 0.85rem; margin-top: 15px;">Makati's #1 source for high-capacity disposable vapes.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="juice.html">Disposables</a></li>
+        <li><a href="catalog.html">Hardware</a></li>
+        <li><a href="order.html">Order Form</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="portfolio-tag">
+    <a href="#" class="jmcy-badge">
+      <span style="color: #fff; font-size: 0.75rem;">Designed & Built by <b>JMCY WEB SOLUTIONS</b></span>
+    </a>
+    <p class="warning-text">© 2026 Cloud & Coil • Nicotine is addictive.</p>
+  </div>
+</footer>
+
+<script>
+  // --- SYNCED MENU LOGIC ---
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileOverlay = document.getElementById('mobileOverlay');
+  const menuBackdrop = document.getElementById('menuBackdrop');
+
+  function closeMenu() {
+    menuToggle.classList.remove('active');
+    mobileOverlay.classList.remove('active');
+    menuBackdrop.classList.remove('active');
+  }
+
+  function openMenu() {
+    menuToggle.classList.add('active');
+    mobileOverlay.classList.add('active');
+    menuBackdrop.classList.add('active');
+  }
+
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (mobileOverlay.classList.contains('active')) closeMenu();
+    else openMenu();
+  });
+
+  menuBackdrop.addEventListener('click', closeMenu);
+
+  mobileOverlay.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  window.addEventListener('scroll', () => {
+    if (mobileOverlay.classList.contains('active')) closeMenu();
+  }, { passive: true });
+
+  // --- FILTER LOGIC ---
+  function filterJuice(category) {
+    const cards = document.querySelectorAll('.juice-card');
+    const buttons = document.querySelectorAll('.filter-btn');
+
+    buttons.forEach(btn => {
+      btn.classList.remove('active');
+      if(btn.innerText.toLowerCase().includes(category)) btn.classList.add('active');
+      if(category === 'all' && btn.innerText.toLowerCase() === 'all') btn.classList.add('active');
+    });
+
+    cards.forEach(card => {
+      if (category === 'all' || card.classList.contains(category)) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+</script>
+</body>
+</html>

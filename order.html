@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send Order | Cloud & Coil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --dark: #0a0a0a;
+      --card-bg: #161616;
+      --accent: #BB86FC;
+      --text: #e0e0e0;
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--dark);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* --- NAVIGATION --- */
+    header {
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(15px);
+      padding: 0 8%;
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 3000;
+      border-bottom: 1px solid rgba(187, 134, 252, 0.05);
+    }
+
+    .logo {
+      font-family: 'Syncopate', sans-serif;
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+
+    .nav-links { display: flex; gap: 30px; align-items: center; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+    /* --- MOBILE MENU --- */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 4000;
+      padding: 5px;
+    }
+    .menu-toggle span { width: 22px; height: 1.5px; background-color: var(--accent); transition: var(--transition); }
+    .menu-toggle.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .menu-backdrop {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100vh;
+      background: rgba(0,0,0,0.8);
+      opacity: 0; visibility: hidden;
+      transition: var(--transition);
+      z-index: 3400;
+    }
+    .menu-backdrop.active { opacity: 1; visibility: visible; }
+
+    .mobile-overlay {
+      position: fixed;
+      top: 0; right: -70%;
+      width: 70%; height: 100vh;
+      background: #111;
+      display: flex; flex-direction: column;
+      padding-top: 80px;
+      transition: var(--transition);
+      z-index: 3500;
+      border-left: 1px solid rgba(187, 134, 252, 0.1);
+    }
+    .mobile-overlay.active { right: 0; }
+    .mobile-overlay a {
+      font-family: 'Syncopate', sans-serif;
+      color: white; text-decoration: none;
+      font-size: 0.75rem; text-transform: uppercase;
+      padding: 20px 25px; border-bottom: 1px solid #1a1a1a;
+      display: block;
+    }
+
+    /* --- ORDER FORM --- */
+    .order-container {
+      padding: 120px 8% 100px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .form-box {
+      background: var(--card-bg);
+      padding: 40px;
+      border: 1px solid #222;
+      border-radius: 4px;
+    }
+
+    .form-box h2 {
+      font-family: 'Syncopate';
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+      letter-spacing: 2px;
+    }
+
+    .form-box p { color: #888; margin-bottom: 30px; font-size: 0.85rem; }
+
+    .form-row { 
+      display: flex; 
+      gap: 15px; 
+      margin-bottom: 20px; 
+    }
+    .input-group { flex: 1; min-width: 0; }
+
+    label {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      color: #666;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: #0a0a0a;
+      border: 1px solid #333;
+      padding: 15px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .item-selection-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr auto;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .add-btn {
+      background: #222;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0 20px;
+      cursor: pointer;
+      font-family: 'Syncopate';
+      font-size: 0.6rem;
+    }
+
+    #orderList {
+      background: #0d0d0d;
+      border: 1px solid #222;
+      padding: 15px;
+      margin-bottom: 10px;
+      min-height: 50px;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      padding: 8px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .total-box {
+      text-align: right;
+      padding: 10px;
+      background: rgba(187, 134, 252, 0.05);
+      border: 1px solid #222;
+      margin-bottom: 20px;
+    }
+
+    .total-box span { font-family: 'Syncopate'; color: var(--accent); font-size: 1rem; }
+
+    .order-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-family: 'Syncopate';
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+
+    footer {
+      padding: 80px 8% 40px; background: #050505;
+      border-top: 1px solid #1a1a1a; color: #888;
+    }
+    .footer-content {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px; text-align: left; margin-bottom: 60px;
+    }
+    .footer-links h4 {
+      color: var(--accent); font-family: 'Syncopate';
+      font-size: 0.7rem; margin-bottom: 20px; letter-spacing: 2px;
+    }
+    .footer-links ul { list-style: none; }
+    .footer-links a {
+      color: #666; text-decoration: none;
+      font-size: 0.85rem; transition: var(--transition);
+    }
+    .footer-links a:hover { color: var(--accent); padding-left: 5px; }
+
+    .portfolio-tag { border-top: 1px solid #111; padding-top: 40px; text-align: center; }
+    .jmcy-badge {
+      display: inline-block; text-decoration: none;
+      background: rgba(187, 134, 252, 0.05); border: 1px solid rgba(187, 134, 252, 0.2);
+      padding: 12px 25px; border-radius: 50px;
+    }
+    .jmcy-badge b { color: var(--accent); }
+    .warning-text { font-size: 0.65rem; color: #444; margin-top: 20px; text-transform: uppercase; }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: flex; }
+    }
+
+    @media (max-width: 600px) {
+      .order-container { padding-top: 100px; }
+      .form-box { padding: 30px 15px; }
+      .form-row { gap: 10px; }
+      input, select, textarea { font-size: 0.75rem; padding: 12px; }
+      label { font-size: 0.55rem; }
+      .item-selection-grid { grid-template-columns: 1fr 1fr; }
+      .add-btn { grid-column: span 2; padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">CLOUD&COIL</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="juice.html">Disposables</a>
+    <a href="catalog.html">Hardware</a>
+    <a href="order.html" class="active">Order Now</a>
+  </div>
+  <div class="menu-toggle" id="menuToggle">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+
+<div class="menu-backdrop" id="menuBackdrop"></div>
+
+<div class="mobile-overlay" id="mobileOverlay">
+  <a href="index.html">Home</a>
+  <a href="juice.html">Disposables</a>
+  <a href="catalog.html">Hardware</a>
+  <a href="order.html">Order Now</a>
+</div>
+
+<div class="order-container">
+  <div class="form-box">
+    <h2>Secure Checkout</h2>
+    <p>Complete details to order via WhatsApp.</p>
+    
+    <form id="vapeOrderForm">
+      <div class="form-row">
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" id="custName" placeholder="Name" required>
+        </div>
+        <div class="input-group">
+          <label>Contact #</label>
+          <input type="tel" id="custPhone" placeholder="09..." required>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Shipping Address</label>
+        <textarea id="custAddress" rows="2" placeholder="Street, City" required></textarea>
+      </div>
+
+      <div class="input-group">
+        <label>Select Products</label>
+        <div class="item-selection-grid">
+          <select id="itemSelect">
+            <optgroup label="FLAVA OXBAR (₱750)">
+              <option value="Flava Watermelon Ice" data-price="750">Watermelon Ice</option>
+              <option value="Flava Strawberry Gelato" data-price="750">Strawberry Gelato</option>
+              <option value="Flava Grape Punch" data-price="750">Grape Punch</option>
+              <option value="Flava Extreme Cool Mint" data-price="750">Extreme Cool Mint</option>
+            </optgroup>
+            <optgroup label="OTHER DISPOSABLES">
+              <option value="Geek Bar Pulse" data-price="850">Geek Bar Pulse (₱850)</option>
+              <option value="Shift Bar Yakult Berry" data-price="780">Shift Bar (₱780)</option>
+              <option value="Relx Pixel City" data-price="650">Relx Pixel City (₱650)</option>
+            </optgroup>
+            <optgroup label="HARDWARE">
+              <option value="OXVA Xlim Kit" data-price="950">OXVA Xlim Kit (₱950)</option>
+              <option value="Geekvape Wenax" data-price="1100">Geekvape Wenax (₱1,100)</option>
+            </optgroup>
+          </select>
+          <select id="itemQty">
+            <option value="1">1x</option>
+            <option value="2">2x</option>
+            <option value="3">3x</option>
+            <option value="4">4x</option>
+            <option value="5">5x</option>
+          </select>
+          <button type="button" class="add-btn" onclick="addItem()">Add</button>
+        </div>
+      </div>
+
+      <div id="orderList">
+        <div style="color: #444; font-size: 0.75rem; text-align: center;">Cart is empty.</div>
+      </div>
+
+      <div class="total-box">
+        <label style="margin-bottom: 0;">Total</label>
+        <span id="grandTotal">₱0</span>
+      </div>
+
+      <div class="input-group" style="margin-bottom: 25px;">
+        <label>Payment Method</label>
+        <select id="payMethod">
+          <option value="GCash">GCash</option>
+          <option value="Maya">Maya</option>
+          <option value="COD">COD</option>
+        </select>
+      </div>
+
+      <button type="button" class="order-btn" onclick="sendToWhatsApp()">Send via WhatsApp</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">CLOUD&COIL</a>
+      <p style="font-size: 0.85rem; margin-top: 15px;">Makati's #1 source for high-capacity disposable vapes.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="juice.html">Disposables</a></li>
+        <li><a href="catalog.html">Hardware</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="portfolio-tag">
+    <a href="#" class="jmcy-badge">
+      <span style="color: #fff; font-size: 0.75rem;">Designed & Built by <b>JMCY WEB SOLUTIONS</b></span>
+    </a>
+    <p class="warning-text">© 2026 Cloud & Coil • Nicotine is addictive.</p>
+  </div>
+</footer>
+
+<script>
+  // --- MENU LOGIC ---
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileOverlay = document.getElementById('mobileOverlay');
+  const menuBackdrop = document.getElementById('menuBackdrop');
+
+  function closeMenu() {
+    menuToggle.classList.remove('active');
+    mobileOverlay.classList.remove('active');
+    menuBackdrop.classList.remove('active');
+  }
+
+  function openMenu() {
+    menuToggle.classList.add('active');
+    mobileOverlay.classList.add('active');
+    menuBackdrop.classList.add('active');
+  }
+
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (mobileOverlay.classList.contains('active')) closeMenu();
+    else openMenu();
+  });
+
+  menuBackdrop.addEventListener('click', closeMenu);
+
+  mobileOverlay.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  window.addEventListener('scroll', () => {
+    if (mobileOverlay.classList.contains('active')) closeMenu();
+  }, { passive: true });
+
+
+  // --- ORDER LOGIC ---
+  let cart = [];
+  let total = 0;
+
+  function addItem() {
+    const sel = document.getElementById('itemSelect');
+    const item = sel.value;
+    const price = parseInt(sel.options[sel.selectedIndex].getAttribute('data-price'));
+    const qty = parseInt(document.getElementById('itemQty').value);
+    cart.push({ name: item, qty: qty, price: price * qty });
+    updateUI();
+  }
+
+  function removeItem(idx) { cart.splice(idx, 1); updateUI(); }
+
+  function updateUI() {
+    const list = document.getElementById('orderList');
+    const totalDisp = document.getElementById('grandTotal');
+    if (cart.length === 0) {
+      list.innerHTML = '<div style="color: #444; font-size: 0.75rem; text-align: center;">Cart is empty.</div>';
+      totalDisp.innerText = "₱0";
+      total = 0;
+      return;
+    }
+    total = cart.reduce((s, i) => s + i.price, 0);
+    totalDisp.innerText = `₱${total.toLocaleString()}`;
+    list.innerHTML = cart.map((i, idx) => `
+      <div class="list-item">
+        <span>${i.qty}x ${i.name}</span>
+        <span>₱${i.price.toLocaleString()} <b style="color:red;margin-left:8px;cursor:pointer" onclick="removeItem(${idx})">✕</b></span>
+      </div>
+    `).join('');
+  }
+
+  function sendToWhatsApp() {
+    const n = document.getElementById('custName').value;
+    const p = document.getElementById('custPhone').value;
+    const a = document.getElementById('custAddress').value;
+    const m = document.getElementById('payMethod').value;
+    if(!n || !p || !a || cart.length === 0) { alert("Please complete form and add items."); return; }
+    const items = cart.map(i => `${i.qty}x ${i.name}`).join('%0A');
+    const msg = `*NEW ORDER*%0A*Name:* ${n}%0A*Phone:* ${p}%0A*Address:* ${a}%0A%0A*Order:*%0A${items}%0A%0A*Total:* ₱${total.toLocaleString()}%0A*Pay via:* ${m}`;
+    window.open(`https://wa.me/639000000000?text=${msg}`, '_blank');
+  }
+</script>
+
+</body>
+</html>
