@@ -19,18 +19,85 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      /* Background Implementation */
       background: 
         linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.85)), 
         url('1000015692.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
     }
+
+    /* --- AGE VERIFICATION MODAL --- */
+    .age-gate {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.98);
+      backdrop-filter: blur(20px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .age-gate.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .age-gate-content {
+      background: var(--card-bg);
+      padding: 50px 30px;
+      border: 1px solid rgba(187, 134, 252, 0.2);
+      text-align: center;
+      max-width: 450px;
+      width: 90%;
+      box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    }
+
+    .age-gate h2 {
+      font-family: 'Syncopate', sans-serif;
+      color: var(--accent);
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      letter-spacing: 3px;
+    }
+
+    .age-gate p {
+      font-size: 0.85rem;
+      color: #bbb;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .age-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .age-btn {
+      padding: 15px 35px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.75rem;
+      transition: var(--transition);
+    }
+
+    .btn-yes { background: var(--accent); color: var(--dark); }
+    .btn-no { background: transparent; color: #666; border: 1px solid #333; }
+    .btn-yes:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(187, 134, 252, 0.3); }
+    .btn-no:hover { color: #fff; border-color: #fff; }
 
     /* --- NAVIGATION --- */
     header {
@@ -108,7 +175,6 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      /* Modified hero background to blend with smoke */
       background: radial-gradient(circle at center, rgba(187, 134, 252, 0.15) 0%, transparent 70%);
       padding: 0 5%;
     }
@@ -139,7 +205,6 @@
     /* --- FEATURED GRID --- */
     .featured { 
       padding: 100px 8%; 
-      /* Changed to semi-transparent to show smoke bg */
       background: rgba(12, 12, 12, 0.7); 
       backdrop-filter: blur(5px);
     }
@@ -159,7 +224,7 @@
     .puff-tag {
       position: absolute; top: 15px; right: 15px;
       background: var(--accent); color: var(--dark);
-      font-size: 0.6rem; font-weight: 900; padding: 4px 10px;
+      font-size: 0.55rem; font-weight: 900; padding: 4px 10px;
       border-radius: 2px; text-transform: uppercase;
     }
     .flava-glow { border: 1px solid rgba(187, 134, 252, 0.3); box-shadow: 0 0 15px rgba(187, 134, 252, 0.05); }
@@ -203,6 +268,17 @@
 </head>
 <body>
 
+<div class="age-gate" id="ageGate">
+  <div class="age-gate-content">
+    <h2>AGE VERIFICATION</h2>
+    <p>This website contains nicotine products. You must be <b>21 years or older</b> to enter.</p>
+    <div class="age-buttons">
+      <button class="age-btn btn-yes" onclick="verifyAge()">I am 21+</button>
+      <button class="age-btn btn-no" onclick="failedAge()">Exit</button>
+    </div>
+  </div>
+</div>
+
 <header id="mainHeader">
   <a href="index.html" class="logo">CLOUD&COIL</a>
   <div class="nav-links">
@@ -239,24 +315,24 @@
   </div>
   <div class="grid">
     <div class="vape-card flava-glow">
-      <div class="puff-tag">10,000 Puffs</div>
+      <div class="puff-tag">G9500</div>
       <img src="flava1.png" alt="Flava Watermelon">
       <h3>Flava Oxbar</h3>
-      <p style="font-size: 0.75rem; color: #888; margin-bottom: 10px;">Watermelon Ice</p>
+      <p style="font-size: 0.90rem; color: #888; margin-bottom: 10px;">Watermelon Sundae</p>
       <p class="price">₱750</p>
     </div>
     <div class="vape-card flava-glow">
-      <div class="puff-tag">10,000 Puffs</div>
+      <div class="puff-tag">G9500</div>
       <img src="flava2.png" alt="Flava Strawberry">
       <h3>Flava Oxbar</h3>
-      <p style="font-size: 0.75rem; color: #888; margin-bottom: 10px;">Strawberry Gelato</p>
+      <p style="font-size: 0.90rem; color: #888; margin-bottom: 10px;">Strawberry Ice Cream</p>
       <p class="price">₱750</p>
     </div>
     <div class="vape-card flava-glow">
-      <div class="puff-tag">10,000 Puffs</div>
-      <img src="flava4.png" alt="Flava Mint">
+      <div class="puff-tag">G9500</div>
+      <img src="flava4.png" alt="Flava BubbleGum">
       <h3>Flava Oxbar</h3>
-      <p style="font-size: 0.75rem; color: #888; margin-bottom: 10px;">Extreme Cool Mint</p>
+      <p style="font-size: 0.90rem; color: #888; margin-bottom: 10px;">BubbleGum Ice Cream</p>
       <p class="price">₱750</p>
     </div>
   </div>
@@ -303,6 +379,7 @@
 </footer>
 
 <script>
+  // Mobile Menu Logic
   const menuToggle = document.getElementById('menuToggle');
   const mobileOverlay = document.getElementById('mobileOverlay');
   const menuBackdrop = document.getElementById('menuBackdrop');
@@ -334,6 +411,28 @@
   window.addEventListener('scroll', () => {
     if (mobileOverlay.classList.contains('active')) closeMenu();
   }, { passive: true });
+
+  // Age Verification Logic
+  document.addEventListener("DOMContentLoaded", function() {
+    const ageGate = document.getElementById('ageGate');
+    
+    // Check if user has already verified
+    if (!localStorage.getItem('ageVerified')) {
+      ageGate.classList.add('active');
+      document.body.style.overflow = 'hidden'; 
+    }
+
+    window.verifyAge = function() {
+      localStorage.setItem('ageVerified', 'true');
+      ageGate.classList.remove('active');
+      document.body.style.overflow = 'auto'; 
+    };
+
+    window.failedAge = function() {
+      // Redirect underage users to a safe site
+      window.location.href = "https://www.google.com"; 
+    };
+  });
 </script>
 
 </body>

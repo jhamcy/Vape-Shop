@@ -9,7 +9,7 @@
   <style>
     :root {
       --dark: #0a0a0a;
-      --card-bg: rgba(22, 22, 22, 0.8); /* Adjusted for transparency */
+      --card-bg: rgba(22, 22, 22, 0.8);
       --accent: #BB86FC;
       --text: #e0e0e0;
       --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -19,10 +19,10 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      /* Background Implementation */
       background: 
         linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.85)), 
         url('1000015692.jpg');
+      background-color: #0a0a0a; /* Fallback color */
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -167,9 +167,13 @@
       text-align: center;
       position: relative;
       backdrop-filter: blur(10px);
+      /* Added for smoother filtering */
+      display: block; 
+      opacity: 1;
     }
     
-    .juice-card.hidden { display: none; }
+    .juice-card.hidden { display: none; opacity: 0; }
+
     .juice-card:hover { 
       border-color: var(--accent); 
       transform: translateY(-5px); 
@@ -260,70 +264,68 @@
   <h2 style="font-family: 'Syncopate'; font-size: 1.5rem;">THE DISPOSABLE BAR</h2>
   <div class="filter-group">
     <button class="filter-btn active" onclick="filterJuice('all')">All</button>
-    <button class="filter-btn" onclick="filterJuice('flava')">Flava Brand</button>
     <button class="filter-btn" onclick="filterJuice('fruit')">Fruit</button>
     <button class="filter-btn" onclick="filterJuice('menthol')">Menthol</button>
     <button class="filter-btn" onclick="filterJuice('pastry')">Pastry</button>
   </div>
 </div>
 
-<section class="juice-grid">
-  
-  <div class="juice-card flava disposable fruit menthol flava-exclusive">
-    <span class="puff-badge">10,000 Puffs</span>
+<section class="juice-grid" id="juiceGrid">
+  <div class="juice-card flava fruit menthol flava-exclusive">
+    <span class="puff-badge">G9500</span>
     <span class="juice-tag">Flava Oxbar</span>
     <img src="flava1.png" alt="Flava Watermelon">
-    <h3>Watermelon Ice</h3>
+    <h3>Watermelon Sundae</h3>
     <p style="color: var(--accent); font-weight: 700;">₱750</p>
   </div>
 
-  <div class="juice-card flava disposable fruit flava-exclusive">
-    <span class="puff-badge">10,000 Puffs</span>
+  <div class="juice-card flava fruit  flava-exclusive">
+    <span class="puff-badge">G9500</span>
     <span class="juice-tag">Flava Oxbar</span>
     <img src="flava2.png" alt="Flava Strawberry">
-    <h3>Strawberry Gelato</h3>
+    <h3>Strawberry Ice Cream</h3>
     <p style="color: var(--accent); font-weight: 700;">₱750</p>
   </div>
 
-  <div class="juice-card flava disposable fruit menthol flava-exclusive">
-    <span class="puff-badge">10,000 Puffs</span>
+  <div class="juice-card flava fruit  flava-exclusive">
+    <span class="puff-badge">G9500</span>
     <span class="juice-tag">Flava Oxbar</span>
     <img src="flava3.png" alt="Flava Grape">
-    <h3>Grape Punch</h3>
+    <h3>Grape Candy</h3>
     <p style="color: var(--accent); font-weight: 700;">₱750</p>
   </div>
 
-  <div class="juice-card flava disposable menthol flava-exclusive">
-    <span class="puff-badge">10,000 Puffs</span>
+  <div class="juice-card pastry menthol flava-exclusive">
+    <span class="puff-badge">G9500</span>
     <span class="juice-tag">Flava Oxbar</span>
-    <img src="flava4.png" alt="Flava Cool Mint">
-    <h3>Extreme Cool Mint</h3>
+    <img src="flava4.png" alt="Flava BubbleGum">
+    <h3>BubbleGum Ice Cream</h3>
     <p style="color: var(--accent); font-weight: 700;">₱750</p>
-  </div>
-
-  <div class="juice-card disposable fruit menthol">
-    <span class="puff-badge">15,000 Puffs</span>
-    <span class="juice-tag">Geek Bar Pulse</span>
-    <img src="dispo1.png" alt="Geek Bar">
-    <h3>Lush Ice</h3>
-    <p style="color: var(--accent); font-weight: 700;">₱850</p>
-  </div>
-
-  <div class="juice-card disposable fruit">
-    <span class="puff-badge">12,000 Puffs</span>
-    <span class="juice-tag">Shift Bar</span>
-    <img src="shift1.png" alt="Shift">
-    <h3>Yakult Berry</h3>
-    <p style="color: var(--accent); font-weight: 700;">₱780</p>
   </div>
 
   <div class="juice-card pastry">
-    <span class="juice-tag">Freebase E-Liquid</span>
-    <img src="juice1.png" alt="Pastry">
-    <h3>Vanilla Almond Cupcake</h3>
-    <p style="color: var(--accent); font-weight: 700;">₱550</p>
+    <span class="puff-badge">G9500</span>
+    <span class="juice-tag">Flava Oxbar</span>
+    <img src="flava5.png" alt="Flava Cola">
+    <h3>Cola Ice Pop</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱750</p>
   </div>
 
+  <div class="juice-card menthol">
+    <span class="puff-badge">G9500</span>
+    <span class="juice-tag">Flava Oxbar</span>
+    <img src="flava6.png" alt="Flava Blueberry">
+    <h3>Blueberry Frosty</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱750</p>
+  </div>
+
+  <div class="juice-card pastry">
+    <span class="puff-badge">G9500</span>
+    <span class="juice-tag">Flava Oxbar</span>
+    <img src="flava7.png" alt="Flava Melon">
+    <h3>Melon Yacult</h3>
+    <p style="color: var(--accent); font-weight: 700;">₱750</p>
+  </div>
 </section>
 
 <footer>
@@ -405,16 +407,24 @@
     const cards = document.querySelectorAll('.juice-card');
     const buttons = document.querySelectorAll('.filter-btn');
 
+    // 1. Update active button visual
     buttons.forEach(btn => {
       btn.classList.remove('active');
-      if(btn.getAttribute('onclick').includes(category)) btn.classList.add('active');
+      // Highlight the button that matches the category clicked
+      if(btn.getAttribute('onclick').includes(`'${category}'`)) {
+        btn.classList.add('active');
+      }
     });
 
+    // 2. Hide/Show cards based on category
     cards.forEach(card => {
       if (category === 'all' || card.classList.contains(category)) {
         card.classList.remove('hidden');
+        // Small delay to trigger CSS transition if desired
+        setTimeout(() => { card.style.opacity = "1"; }, 10);
       } else {
         card.classList.add('hidden');
+        card.style.opacity = "0";
       }
     });
   }
